@@ -73,6 +73,7 @@ public class Node implements Comparable{
 	}
 	
 	public Status runTask() throws Exception{
+		if(this.getNumParents() > 0) throw new Exception("Trying to run a task that still have dependencies."); 
 		return task.run();
 	}
 	

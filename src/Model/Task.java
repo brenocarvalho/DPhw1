@@ -51,8 +51,9 @@ public class Task extends Observable {
 		this.status = Status.SUCCESS;
 	}
 
-	public Task(String name, double extimatedTime) throws Exception{
+	public Task(String name, long extimatedTime) throws Exception{
 		this(name, extimatedTime, new SleepCode());
+		this.parameters = extimatedTime;
 	}
 	
 	public Status run() throws Exception{
@@ -62,6 +63,6 @@ public class Task extends Observable {
 	}
 	
 	public String toString(){
-		return String.format("Task: %s \nEstimatedTime: %6.2f \n\n", this.name);
+		return String.format("Task: %s \nEstimatedTime: %6.2f \n\n", this.name, this.extimatedTime);
 	}
 }

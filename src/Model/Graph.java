@@ -14,6 +14,18 @@ public class Graph {
 		orphanNodes = new LinkedList<Node>();
 		numEdges = 0;
 	}
+
+	//TODO complete this method in order to be able to make a schedule without destroying the graph
+	/*
+	public Graph duplicateGraph(){
+		Graph out = new Graph();
+		for(Node node: nodes){
+			out.nodes.add(null)
+		}
+		
+		return out;
+	}
+	*/
 	
 	public int getNumEdges(){
 		return numEdges;
@@ -62,14 +74,6 @@ public class Graph {
 	protected void removeOrphan(Node node) {
 		orphanNodes.remove(node);
 	}
-	
-	public String toString(){
-		String out = "";
-		for(Node n: nodes){
-			out += n.toString() + "\n";
-		}
-		return out;
-	}
 
 	public boolean hasOrphan() {
 		return !orphanNodes.isEmpty();
@@ -82,6 +86,14 @@ public class Graph {
 	public Node popOrphan(){
 		Node out = getOrphan();
 		this.removeNode(out);
+		return out;
+	}
+
+	public String toString(){
+		String out = "";
+		for(Node n: nodes){
+			out += n.toString() + "\n";
+		}
 		return out;
 	}
 }
