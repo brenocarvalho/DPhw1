@@ -51,11 +51,11 @@ public class Task extends Observable {
 		this.status = Status.SUCCESS;
 	}
 
-	public Task(String name, double extimatedTime){
-		this.code = new SleepCode();
+	public Task(String name, double extimatedTime) throws Exception{
+		this(name, extimatedTime, new SleepCode());
 	}
 	
-	public Status run(){
+	public Status run() throws Exception{
 		status = Status.RUNNING;
 		status = code.run(parameters);
 		return status;

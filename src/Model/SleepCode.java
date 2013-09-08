@@ -2,7 +2,7 @@ package Model;
 
 public class SleepCode extends Code{
 
-	public Status run(Object obj){
+	public Status run(Object obj) throws Exception{
 		Task a = new Task("1", 100.);
 
 		try {

@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 //TODO make impossible to use a node from another graph as a parent
-public class Node {
+public class Node implements Comparable{
 	private Task task;
 	private Graph graph;
 	private Set<Node> parents, children;
@@ -52,19 +52,27 @@ public class Node {
 		return graph;
 	}
 	
-	public Node(Task task, Graph graph, Set<Node> parents) throws Exception{
+	public Node(Task task, Graph graph, Set<Node> parents, Set<Node> children) throws Exception{
 		this.setTask(task);
 		this.parents = parents;
+		this.children = children;
 		this.graph = graph;
+		this.graph.addNode(this);
+	}
+	
+	public Node(Task task, Set<Node> parents) throws Exception{
+		this(task, new Graph(), parents, new TreeSet<Node>());
+	}
+
+	public Node(Task task, Graph graph) throws Exception{
+		this(task, graph, new TreeSet<Node>(), new TreeSet<Node>());
 	}
 	
 	public Node(Task task) throws Exception{
-		this.setTask(task);
-		this.graph = new Graph();
-		this.parents = new TreeSet<Node>();
+		this(task, new Graph(), new TreeSet<Node>(), new TreeSet<Node>());
 	}
 	
-	public Status runTask(){
+	public Status runTask() throws Exception{
 		return task.run();
 	}
 	
@@ -83,6 +91,12 @@ public class Node {
 
 	public Iterator<Node> childrenIterator() {
 		return children.iterator();
+	}
+
+	@Override
+	public int compareTo(Object n) {
+		Node node = (Node) n;
+		return this.getNumParents() - node.getNumParents();
 	}
 	
 }

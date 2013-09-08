@@ -1,15 +1,17 @@
 package Model;
 
 import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class Graph {
-	private Set<Node> nodes, orphanNodes;
+	private Collection<Node> nodes, orphanNodes;
 	private int numEdges;
 	
 	public Graph(){
-		nodes = new TreeSet<Node>();
+		nodes = new LinkedList<Node>();
+		orphanNodes = new LinkedList<Node>();
 		numEdges = 0;
 	}
 	
@@ -59,5 +61,27 @@ public class Graph {
 	
 	protected void removeOrphan(Node node) {
 		orphanNodes.remove(node);
+	}
+	
+	public String toString(){
+		String out = "";
+		for(Node n: nodes){
+			out += n.toString() + "\n";
+		}
+		return out;
+	}
+
+	public boolean hasOrphan() {
+		return !orphanNodes.isEmpty();
+	}
+	
+	public Node getOrphan(){
+		return orphanNodes.iterator().next();
+	}
+	
+	public Node popOrphan(){
+		Node out = getOrphan();
+		this.removeNode(out);
+		return out;
 	}
 }

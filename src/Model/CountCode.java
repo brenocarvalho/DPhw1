@@ -2,7 +2,7 @@ package Model;
 
 public class CountCode extends Code{
 	
-	public Status run(Object obj){
+	public Status run(Object obj)  throws Exception{
 		int value = ((Integer) obj).intValue(),
 			sum = 0;
 		while(value > 0){
