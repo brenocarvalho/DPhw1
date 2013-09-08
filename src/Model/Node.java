@@ -3,9 +3,10 @@ package Model;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-
+//TODO make impossible to use a node from another graph as a parent
 public class Node {
 	private Task task;
+	private Graph graph;
 	private Set<Node> parents, children;
 	
 	public Task getTask() {
@@ -25,21 +26,18 @@ public class Node {
 		return parents;
 	}
 	
-	public void addParent(Node p){
+	public void addParent(Node p) throws Exception{
+		if(p == null) throw new Exception("Invalid node");
+		if(!graph.contains(p)) throw new Exception("Node belongs to another graph.");
 		parents.add(p);
-		p.addChildren(this);
+		p.children.add(this);
+		graph.removeOrphan(this);
 	}
 	
 	public void removeParent(Node p){
 		parents.remove(p);
-	}
-	
-	public void addChildren(Node p){
-		children.add(p);
-	}
-	
-	public void removeChildren(Node p){
-		children.remove(p);
+		p.children.remove(this);
+		if(this.getNumParents() == 0) graph.addOrphan(this);
 	}
 	
 	public int getNumParents() {
@@ -50,13 +48,19 @@ public class Node {
 		return children.size();
 	}
 	
-	public Node(Task task, Set<Node> parents) throws Exception{
+	public Graph getGraph(){
+		return graph;
+	}
+	
+	public Node(Task task, Graph graph, Set<Node> parents) throws Exception{
 		this.setTask(task);
 		this.parents = parents;
+		this.graph = graph;
 	}
 	
 	public Node(Task task) throws Exception{
 		this.setTask(task);
+		this.graph = new Graph();
 		this.parents = new TreeSet<Node>();
 	}
 	
@@ -75,6 +79,10 @@ public class Node {
 		}
 		
 		return String.format("Node<%s | %s>", task.getName(), parentsNames);
+	}
+
+	public Iterator<Node> childrenIterator() {
+		return children.iterator();
 	}
 	
 }
