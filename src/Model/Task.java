@@ -7,7 +7,7 @@ import java.util.Observable;
 public class Task extends Observable {
 	private String name;
 	private double extimatedTime;
-	private boolean concluded;
+	private Status status;
 	private Object parameters;
 	private Code code;
 	
@@ -28,12 +28,8 @@ public class Task extends Observable {
 		this.extimatedTime = extimatedTime;
 	}
 
-	public boolean isConcluded() {
-		return concluded;
-	}
-
-	public void setConcluded(boolean concluded) {
-		this.concluded = concluded;
+	public Status getStatus() {
+		return status;
 	}
 
 	public Code getCode() {
@@ -52,21 +48,17 @@ public class Task extends Observable {
 		this.name = name;
 		this.setExtimatedTime(extimatedTime);
 		this.setCode(code);
-		this.setConcluded(false);
+		this.status = Status.SUCCESS;
 	}
 
 	public Task(String name, double extimatedTime){
-		this.name = name;
-		this.extimatedTime = extimatedTime;
 		this.code = new SleepCode();
-		this.concluded = false;
 	}
 	
 	public Status run(){
-		concluded = false;
-		Status result = code.run(this.parameters);
-		concluded = true;
-		return result;
+		status = Status.RUNNING;
+		status = code.run(parameters);
+		return status;
 	}
 	
 	public String toString(){
