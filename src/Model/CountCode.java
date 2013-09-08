@@ -1,13 +1,14 @@
 package Model;
 
-public class CountCode {
-
+public class CountCode extends Code{
+	
 	public Status run(Object obj){
-		try {
-			Thread.sleep((Integer) obj);
-		} catch (InterruptedException e) {
-			return Status.FAIL;
+		int value = ((Integer) obj).intValue(),
+			sum = 0;
+		while(value > 0){
+			sum += value--;
 		}
+		System.out.print(String.format("Sum: %d\n", sum));
 		return Status.SUCCESS;
 	}
 }
