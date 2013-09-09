@@ -1,10 +1,11 @@
 package Model;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 //TODO make impossible to use a node from another graph as a parent
-public class Node implements Comparable{
+public class Node implements Comparable<Node>{
 	private Task task;
 	private Graph graph;
 	private Set<Node> parents, children;
@@ -26,7 +27,7 @@ public class Node implements Comparable{
 		return parents;
 	}
 	
-	public void addParent(Node p) throws Exception{
+	public synchronized void addParent(Node p) throws Exception{
 		if(p == null) throw new Exception("Invalid node");
 		if(!graph.contains(p)) throw new Exception("Node belongs to another graph.");
 		parents.add(p);
@@ -34,7 +35,7 @@ public class Node implements Comparable{
 		graph.removeOrphan(this);
 	}
 	
-	public void removeParent(Node p){
+	public synchronized void removeParent(Node p){
 		parents.remove(p);
 		p.children.remove(this);
 		if(this.getNumParents() == 0) graph.addOrphan(this);
@@ -65,16 +66,16 @@ public class Node implements Comparable{
 	}
 
 	public Node(Task task, Graph graph) throws Exception{
-		this(task, graph, new TreeSet<Node>(), new TreeSet<Node>());
+		this(task, graph, new TreeSet<Node>(), new HashSet<Node>());
 	}
 	
 	public Node(Task task) throws Exception{
-		this(task, new Graph(), new TreeSet<Node>(), new TreeSet<Node>());
+		this(task, new Graph(), new TreeSet<Node>(), new HashSet<Node>());
 	}
 	
-	public Status runTask() throws Exception{
+	public void runTask() throws Exception{
 		if(this.getNumParents() > 0) throw new Exception("Trying to run a task that still have dependencies."); 
-		return task.run();
+		task.run();
 	}
 	
 	public String toString(){
@@ -95,9 +96,8 @@ public class Node implements Comparable{
 	}
 
 	@Override
-	public int compareTo(Object n) {
-		Node node = (Node) n;
-		return this.getNumParents() - node.getNumParents();
+	public int compareTo(Node n) {
+		return this.getNumParents() - n.getNumParents();
 	}
 	
 }

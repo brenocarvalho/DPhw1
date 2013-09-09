@@ -31,61 +31,57 @@ public class Graph {
 		return numEdges;
 	}
 	
-	public void addNode(Node node){
+	public synchronized void addNode(Node node){
 		nodes.add(node);
 		if(node.getNumParents() == 0){
 			orphanNodes.add(node);
 		}
 	}
 	
-	public void removeNode(Node node){
-		nodes.remove(node);
-		orphanNodes.remove(node);
+	public synchronized void removeNode(Node node){
 		Node child;
 		Iterator<Node> childIt = node.childrenIterator();
 		while(childIt.hasNext()){
 			child = childIt.next();
 		//for(Node child: node.childrenIterator()){
 			child.removeParent(node);
-			if(child.getNumParents() == 0) this.addOrphan(child);
+			if(child.getNumParents() == 0 && !this.orphanNodes.contains(child)) this.addOrphan(child);
+			//System.out.println("NEW ORPHAN!"+child.getTaskName());
+			childIt = node.childrenIterator();
 		}
-		if(node.getNumParents() == 0){
-			orphanNodes.remove(node);
-		}
+		//TODO should destroy all the edges of excluded node
+		nodes.remove(node);
+		orphanNodes.remove(node);
 	}
 	
 	public int getNumNodes(){
 		return nodes.size();
 	}
 	
-	public Iterator<Node> orphanNodesIterator(){
-		//TODO implement this iterator
-		return null;
-	}
-	
 	public boolean contains(Node node){
 		return (nodes.contains(node));
 	}
 
-	protected void addOrphan(Node node) {
+	protected synchronized void addOrphan(Node node) {
 		orphanNodes.add(node);
 	}
 	
-	protected void removeOrphan(Node node) {
+	protected synchronized void removeOrphan(Node node) {
 		orphanNodes.remove(node);
 	}
 
-	public boolean hasOrphan() {
+	public synchronized boolean hasOrphan() {
 		return !orphanNodes.isEmpty();
 	}
 	
-	public Node getOrphan(){
+	public synchronized Node getOrphan(){
 		return orphanNodes.iterator().next();
 	}
 	
-	public Node popOrphan(){
+	public synchronized Node popOrphan(){
 		Node out = getOrphan();
-		this.removeNode(out);
+		//this.removeNode(out);
+		this.orphanNodes.remove(out);
 		return out;
 	}
 

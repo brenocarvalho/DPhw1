@@ -2,7 +2,7 @@ package Model;
 
 public class Status {
 	private String msg;
-	public static final Status	SUCCESS = 	new Status("Successifuly executed"),
+	public static final Status	SUCCESS = 	new Status("Successfuly executed"),
 									FAIL 	=	new Status("The execution Failed"),
 									RUNNING =	new Status("Running");
 	public Status(String message){

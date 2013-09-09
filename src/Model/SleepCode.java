@@ -6,7 +6,7 @@ public class SleepCode extends Code{
 		Task a = new Task("1", 100);
 
 		try {
-			Thread.sleep((Long) obj);
+		Thread.sleep((Long) obj);
 			//System.out.println("["+((Long) obj)+"]");
 		} catch (InterruptedException e) {
 			return Status.FAIL;

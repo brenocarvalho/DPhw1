@@ -1,11 +1,14 @@
 package Model;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Scheduler {
 	private List<Pair<Task, Integer>> executionLog;
-	private List<Thread> threads;
+	private List<SThread> threads, freeThreads;	
+	private long begin, end;
+	private List<Node> lock;
 	private Graph graph;
 	private double timeElapsed;
 	
@@ -15,23 +18,69 @@ public class Scheduler {
 	
 	//TODO make it work for many threads
 	public void execute() throws Exception {
+		begin = System.currentTimeMillis();
+		executeAux();
+	}
+	
+	private void executeAux() throws Exception {
 		if(graph == null) return;
-		long begin = System.currentTimeMillis(),
-			  end;
 		while(graph.hasOrphan()){
-			Node next = graph.popOrphan();
-			Status status = next.runTask();
-			if(status == Status.FAIL){
-				System.out.print("A task failed!");
-				return;
+			while(graph.hasOrphan() && this.hasFreeThread()){
+				//Bind a thread and a task and run it
+				Node node = graph.popOrphan();
+				SThread t = this.popFreeThread();
+				//System.out.print(String.format("\ncalled task:%s\tnode children: %d \n", node.getTaskName(), node.getNumChildren()));
+				this.addExecution(threads.indexOf(t), node.getTask());
+				//System.out.println("NumParents:"+node.getNumParents()+" "+node.getTaskName());
+				t.addTask(node);
+				t.setLock(lock);
+				t.start();
 			}
-			this.addExecution(1, next.getTask());
+			
+			synchronized(lock){
+				//System.out.println("waiting");
+				lock.wait();
+				if(lock.size() == 0) System.out.print("!!!!!!!!");
+				for(Node n: lock){
+					graph.removeNode(n);
+				}
+			}
+		}
+		
+		synchronized(lock){
+			while(!allThreadsFree()){
+				System.out.println("waiting the completion");
+				lock.wait();
+			}
 		}
 		end = System.currentTimeMillis();
 		timeElapsed += (end-begin)/1000.;
+		//System.out.println("NumThreads:"+numThreadsRunning);
 	}
 	
-	public Thread getThread(int index){
+	//It removes a thread from the free threads list and execute a task on it
+	private synchronized SThread popFreeThread() throws Exception {
+		if(freeThreads.isEmpty()) throw new Exception("Trying to use more threads than what is available.");
+		SThread t = freeThreads.get(0);
+		freeThreads.remove(0);
+		return t;
+	}
+
+	public boolean hasFreeThread() {
+		return !freeThreads.isEmpty();
+	}
+	
+	public boolean allThreadsFree(){
+		return freeThreads.size() == threads.size();
+	}
+	
+	public void addFreeThread(SThread thread){
+		SThread newt = new SThread(this);
+		this.freeThreads.add(newt);
+		Collections.replaceAll(this.threads, thread, newt);
+	}
+
+	public synchronized SThread getThread(int index){
 		return this.threads.get(index);
 	}
 	
@@ -48,10 +97,14 @@ public class Scheduler {
 	public Scheduler(int numThreads, Graph g){
 		executionLog = new LinkedList();
 		this.graph = g;
+		this.lock = new LinkedList();
 		this.threads = new LinkedList();
+		this.freeThreads = new LinkedList();
 		this.timeElapsed = 0;
 		for(int i = 0; i < numThreads; i++){
-			this.threads.add(new Thread());
+			SThread n = new SThread(this);
+			this.threads.add(n);
+			this.freeThreads.add(n);
 		}
 	}
 	
@@ -63,7 +116,7 @@ public class Scheduler {
 	public String toString(){
 		String out = "Schedule:\n";
 		for(Pair<Task, Integer> order: executionLog){
-			out += String.format("\tTask: %s\t Thread: %s\n", order.getKey().getName(), order.getValue());
+			out += String.format("\tTask: %s\t Thread: %s Status: %s\n", order.getKey().getName(), order.getValue(), order.getKey().getStatus());
 		}
 		out += String.format("----------------\nElapsed: %7.3f sec\n", timeElapsed);
 		return out;

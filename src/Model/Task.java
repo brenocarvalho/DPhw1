@@ -59,6 +59,7 @@ public class Task extends Observable {
 	public Status run() throws Exception{
 		status = Status.RUNNING;
 		status = code.run(parameters);
+		this.notifyObservers();
 		return status;
 	}
 	
