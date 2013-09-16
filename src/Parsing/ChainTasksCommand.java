@@ -17,18 +17,6 @@ public class ChainTasksCommand implements Command{
 		this.graph = graph;
 	}
 	
-	public Code getTaskType(String arg) throws Exception{
-		if( arg.equalsIgnoreCase("sleep")){
-			return new SleepCode();
-		}
-		else{
-			if(arg.equalsIgnoreCase("count")){
-				return new CountCode();
-			}
-		}
-		throw new Exception("Invalid task type");
-	}
-	
 	private Node taskNameToNode(String name) throws Exception{
 		Node n = graph.getNodebyTaskName(name);
 		if(n == null){

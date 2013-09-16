@@ -26,7 +26,6 @@ public class Parser {
 				e.printStackTrace();
 				break;
 			}
-			
 		}
 	}
 	
@@ -40,9 +39,19 @@ public class Parser {
 			System.exit(1);
 		}
 		Command parser = new CreateTaskCommand(graph);
-		parseScanner(scanner, parser);
+		while(scanner.hasNextLine()){
+			String line = scanner.nextLine();
+			try {
+				parser.run(line);
+			} catch (Exception e) {
+				parser = new ChainTasksCommand(graph);
+				try {
+					parser.run(line);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
 		
-		parser = new ChainTasksCommand(graph);
-		parseScanner(scanner, parser);
 	}
 }

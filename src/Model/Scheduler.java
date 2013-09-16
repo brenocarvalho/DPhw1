@@ -24,12 +24,11 @@ public class Scheduler {
 	
 	private void executeAux() throws Exception {
 		if(graph == null) return;
-		while(graph.hasOrphan()){
+		while(graph.hasOrphan() || !allThreadsFree()){
 			while(graph.hasOrphan() && this.hasFreeThread()){
 				//Bind a thread and a task and run it
 				Node node = graph.popOrphan();
 				SThread t = this.popFreeThread();
-				//System.out.print(String.format("\ncalled task:%s\tnode children: %d \n", node.getTaskName(), node.getNumChildren()));
 				this.addExecution(threads.indexOf(t), node.getTask());
 				//System.out.println("NumParents:"+node.getNumParents()+" "+node.getTaskName());
 				t.addTask(node);
@@ -40,9 +39,9 @@ public class Scheduler {
 			synchronized(lock){
 				//System.out.println("waiting");
 				lock.wait();
-				System.out.print("I explored all orphans"+lock.size()+"\n");
-				for(int i = 0; i < lock.size(); i++)
-					System.out.println(lock.get(i));
+				//System.out.print("I explored all orphans"+lock.size()+"\n");
+				//for(int i = 0; i < lock.size(); i++)
+				//	System.out.println(lock.get(i));
 				while(!lock.isEmpty()){
 					Node n = lock.get(0);
 					graph.removeNode(n);
@@ -50,12 +49,12 @@ public class Scheduler {
 				}
 			}
 		}
-		synchronized(lock){
-			while(!allThreadsFree()){
-				System.out.println("waiting the completion");
-				lock.wait();
-			}
-		}
+//		synchronized(lock){
+//			while(!allThreadsFree()){
+//				System.out.println("waiting the completion");
+//				lock.wait();
+//			}
+//		}
 		end = System.currentTimeMillis();
 		timeElapsed += (end-begin)/1000.;
 		//System.out.println("NumThreads:"+numThreadsRunning);

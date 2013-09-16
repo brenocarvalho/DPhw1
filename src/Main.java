@@ -5,8 +5,11 @@ import Parsing.Parser;
 
 public class Main {
 	public static void main(String args[]) throws Exception{
+		if( args.length < 2){
+			throw new Exception("Bad parameters. I need a filename and a threads number.");
+		}
 		Parser parser = new Parser();
-		parser.parse("file1.txt");
+		parser.parse(args[0]);
 		Graph g = parser.getGraph();
 		/*
 		Graph g = new Graph();
@@ -43,7 +46,7 @@ public class Main {
 		//System.out.println(g);
 		
 		
-		Scheduler sc = new Scheduler(3, g);
+		Scheduler sc = new Scheduler(Integer.valueOf(args[1]).intValue(), g);
 		sc.execute();
 		//System.out.println("Orphan tasks: "+g.hasOrphan());
 		Thread.sleep(1000);
