@@ -1,5 +1,5 @@
 package Parsing;
 
 public interface Command {
-	public void run(String arg);
+	public void run(String arg) throws Exception;
 }

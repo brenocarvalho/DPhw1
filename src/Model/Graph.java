@@ -11,7 +11,7 @@ public class Graph {
 	
 	public Graph(){
 		nodes = new LinkedList<Node>();
-		orphanNodes = new LinkedList<Node>();
+		orphanNodes = new HashSet<Node>();
 		numEdges = 0;
 	}
 
@@ -45,8 +45,6 @@ public class Graph {
 			child = childIt.next();
 		//for(Node child: node.childrenIterator()){
 			child.removeParent(node);
-			if(child.getNumParents() == 0 && !this.orphanNodes.contains(child)) this.addOrphan(child);
-			//System.out.println("NEW ORPHAN!"+child.getTaskName());
 			childIt = node.childrenIterator();
 		}
 		//TODO should destroy all the edges of excluded node

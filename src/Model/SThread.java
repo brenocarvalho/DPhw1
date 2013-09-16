@@ -39,11 +39,12 @@ public class SThread extends Thread{
 			status = t.run();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		synchronized(lock){
-			scheduler.addFreeThread(this);
-			lock.add(n);
-			lock.notifyAll();
+		}finally{
+			synchronized(lock){
+				scheduler.addFreeThread(this);
+				lock.add(n);
+				lock.notifyAll();
+			}
 		}
 	}
 

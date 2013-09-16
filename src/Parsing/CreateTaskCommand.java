@@ -30,25 +30,20 @@ public class CreateTaskCommand implements Command{
 	}
 	
 	@Override
-	public void run(String arg) {
+	public void run(String arg) throws Exception {
 		//format: "TaskName := typeName integer"
 		Pattern r = Pattern.compile("(\\w+)\\s*:=\\s*(sleep|count)\\s*(\\d*)");
 		Matcher m = r.matcher(arg);
 		//System.out.println(":"+m.groupCount()+"\n");
 			//System.out.println(m.group(1)+" "+m.group(2)+" "+m.group(3));
-		try {
-			if(m.find()){
-				int value = Integer.valueOf(m.group(3)).intValue();
-				Code taskType = getTaskType(m.group(2));
-				Node newNode = new Node(new Task(m.group(1), value, taskType), graph);
-				//System.out.println(newNode);
-			}
-			else{
-				throw new Exception("Invalid Format when creating new task");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
+		if(m.find()){
+			int value = Integer.valueOf(m.group(3)).intValue();
+			Code taskType = getTaskType(m.group(2));
+			Node newNode = new Node(new Task(m.group(1), value, taskType), graph);
+			//System.out.println(newNode);
+		}
+		else{
+			throw new Exception("Invalid Format when creating new task");
 		}
 	}
 

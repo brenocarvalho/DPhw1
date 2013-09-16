@@ -1,12 +1,14 @@
 import javax.swing.JOptionPane;
 
 import Model.*;
-import Parsing.ChainTasksCommand;
-import Parsing.Command;
-import Parsing.CreateTaskCommand;
+import Parsing.Parser;
 
 public class Main {
 	public static void main(String args[]) throws Exception{
+		Parser parser = new Parser();
+		parser.parse("file1.txt");
+		Graph g = parser.getGraph();
+		/*
 		Graph g = new Graph();
 		Command t = new CreateTaskCommand(g);
 		int wait = 500;
@@ -41,7 +43,7 @@ public class Main {
 		//System.out.println(g);
 		
 		
-		Scheduler sc = new Scheduler(1, g);
+		Scheduler sc = new Scheduler(3, g);
 		sc.execute();
 		//System.out.println("Orphan tasks: "+g.hasOrphan());
 		Thread.sleep(1000);

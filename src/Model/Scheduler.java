@@ -41,13 +41,15 @@ public class Scheduler {
 				//System.out.println("waiting");
 				lock.wait();
 				System.out.print("I explored all orphans"+lock.size()+"\n");
-				for(Node n: lock){
+				for(int i = 0; i < lock.size(); i++)
+					System.out.println(lock.get(i));
+				while(!lock.isEmpty()){
+					Node n = lock.get(0);
 					graph.removeNode(n);
+					lock.remove(n);
 				}
-				lock.clear();
 			}
 		}
-		
 		synchronized(lock){
 			while(!allThreadsFree()){
 				System.out.println("waiting the completion");

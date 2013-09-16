@@ -38,7 +38,7 @@ public class ChainTasksCommand implements Command{
 	}
 	
 	@Override
-	public void run(String arg) {
+	public void run(String arg) throws Exception{
 		//format: "Task1Name -> Task2Name -> [...]"
 		//format: "Task1Name -> (Task
 		
@@ -47,25 +47,20 @@ public class ChainTasksCommand implements Command{
 		Matcher m1 = r1.matcher(arg);
 		Matcher m2 = r2.matcher(arg);
 		Exception creationEx = new Exception("Invalid format while building the tree");
-		try {
-			Node a,b;
-			if(m1.find()){
-				//System.out.println(m1.group());
-				a = taskNameToNode(m1.group());
-			}
-			else{
-				throw creationEx;
-			}
-			while(m2.find()){
-				//System.out.println(m2.group(1));
-				b = taskNameToNode(m2.group(1));
-				b.addParent(a);
-				System.out.println(String.format("%s -> %s",a.getTaskName(), b.getTaskName()));
-				a = b;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
+		Node a,b;
+		if(m1.find()){
+			//System.out.println(m1.group());
+			a = taskNameToNode(m1.group());
+		}
+		else{
+			throw creationEx;
+		}
+		while(m2.find()){
+			//System.out.println(m2.group(1));
+			b = taskNameToNode(m2.group(1));
+			b.addParent(a);
+			System.out.println(String.format("%s -> %s",a.getTaskName(), b.getTaskName()));
+			a = b;
 		}
 	}
 

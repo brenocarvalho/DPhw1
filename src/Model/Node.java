@@ -35,9 +35,14 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public synchronized void removeParent(Node p){
-		parents.remove(p);
-		p.children.remove(this);
-		if(this.getNumParents() == 0) graph.addOrphan(this);
+		synchronized(graph){
+			parents.remove(p);
+			p.children.remove(this);
+			if(this.getNumParents() == 0){
+				graph.addOrphan(this);
+				//System.out.println("NEW ORPHAN!"+this.getTaskName());
+			}
+		}
 	}
 	
 	public int getNumParents() {
