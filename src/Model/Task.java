@@ -4,7 +4,7 @@ import java.util.Observable;
 
 //TODO make Task implements Observable
 
-public class Task extends Observable {
+public class Task{
 	private String name;
 	private double extimatedTime;
 	private Status status;
@@ -44,22 +44,21 @@ public class Task extends Observable {
 		return this.name;
 	}
 
-	public Task(String name, double extimatedTime, Code code) throws Exception{
+	public Task(String name, long extimatedTime, Code code) throws Exception{
 		this.name = name;
 		this.setExtimatedTime(extimatedTime);
 		this.setCode(code);
+		this.parameters = extimatedTime;
 		this.status = Status.SUCCESS;
 	}
 
 	public Task(String name, long extimatedTime) throws Exception{
 		this(name, extimatedTime, new SleepCode());
-		this.parameters = extimatedTime;
 	}
 	
 	public Status run() throws Exception{
 		status = Status.RUNNING;
 		status = code.run(parameters);
-		this.notifyObservers();
 		return status;
 	}
 	

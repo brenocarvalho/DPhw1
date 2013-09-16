@@ -50,6 +50,7 @@ public class Graph {
 			childIt = node.childrenIterator();
 		}
 		//TODO should destroy all the edges of excluded node
+		//node.removeEdges();
 		nodes.remove(node);
 		orphanNodes.remove(node);
 	}
@@ -83,6 +84,15 @@ public class Graph {
 		//this.removeNode(out);
 		this.orphanNodes.remove(out);
 		return out;
+	}
+	
+	public Node getNodebyTaskName(String name){
+		for(Node n: this.nodes){
+			if(n.getTaskName().equals(name)){
+				return n;
+			}
+		}
+		return null;
 	}
 
 	public String toString(){

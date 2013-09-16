@@ -40,10 +40,11 @@ public class Scheduler {
 			synchronized(lock){
 				//System.out.println("waiting");
 				lock.wait();
-				if(lock.size() == 0) System.out.print("!!!!!!!!");
+				System.out.print("I explored all orphans"+lock.size()+"\n");
 				for(Node n: lock){
 					graph.removeNode(n);
 				}
+				lock.clear();
 			}
 		}
 		
@@ -76,7 +77,7 @@ public class Scheduler {
 	
 	public void addFreeThread(SThread thread){
 		SThread newt = new SThread(this);
-		this.freeThreads.add(newt);
+		this.freeThreads.add(0, newt);
 		Collections.replaceAll(this.threads, thread, newt);
 	}
 

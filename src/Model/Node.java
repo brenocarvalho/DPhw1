@@ -3,7 +3,6 @@ package Model;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 //TODO make impossible to use a node from another graph as a parent
 public class Node implements Comparable<Node>{
 	private Task task;
@@ -62,15 +61,15 @@ public class Node implements Comparable<Node>{
 	}
 	
 	public Node(Task task, Set<Node> parents) throws Exception{
-		this(task, new Graph(), parents, new TreeSet<Node>());
+		this(task, new Graph(), parents, new HashSet<Node>());
 	}
 
 	public Node(Task task, Graph graph) throws Exception{
-		this(task, graph, new TreeSet<Node>(), new HashSet<Node>());
+		this(task, graph, new HashSet<Node>(), new HashSet<Node>());
 	}
 	
 	public Node(Task task) throws Exception{
-		this(task, new Graph(), new TreeSet<Node>(), new HashSet<Node>());
+		this(task, new Graph(), new HashSet<Node>(), new HashSet<Node>());
 	}
 	
 	public void runTask() throws Exception{
@@ -88,7 +87,7 @@ public class Node implements Comparable<Node>{
 			parentsNames += ", "+parentsI.next().getTaskName();
 		}
 		
-		return String.format("Node<%s | %s>", task.getName(), parentsNames);
+		return String.format("<%s [%s]>", task.getName(), parentsNames);
 	}
 
 	public Iterator<Node> childrenIterator() {
