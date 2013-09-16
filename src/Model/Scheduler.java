@@ -38,10 +38,10 @@ public class Scheduler {
 			
 			synchronized(lock){
 				//System.out.println("waiting");
-				lock.wait();
-				//System.out.print("I explored all orphans"+lock.size()+"\n");
-				//for(int i = 0; i < lock.size(); i++)
-				//	System.out.println(lock.get(i));
+				if(!allThreadsFree()){
+					lock.wait();
+				}
+				//System.out.println("going");
 				while(!lock.isEmpty()){
 					Node n = lock.get(0);
 					graph.removeNode(n);
