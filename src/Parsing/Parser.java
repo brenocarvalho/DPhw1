@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import Model.Graph;
+import model.Graph;
 
 public class Parser {
 	private Graph graph;

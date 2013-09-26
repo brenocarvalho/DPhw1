@@ -3,12 +3,7 @@ package Parsing;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Model.Code;
-import Model.CountCode;
-import Model.Graph;
-import Model.Node;
-import Model.SleepCode;
-import Model.Task;
+import model.*;
 
 public class CreateTaskCommand implements Command{
 	private Graph graph;

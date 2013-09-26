@@ -3,12 +3,12 @@ package Parsing;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Model.Code;
-import Model.CountCode;
-import Model.Graph;
-import Model.Node;
-import Model.SleepCode;
-import Model.Task;
+import model.Code;
+import model.CountCode;
+import model.Graph;
+import model.Node;
+import model.SleepCode;
+import model.Task;
 
 public class ChainTasksCommand implements Command{
 	private Graph graph;

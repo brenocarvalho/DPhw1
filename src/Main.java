@@ -1,6 +1,6 @@
 import javax.swing.JOptionPane;
 
-import Model.*;
+import model.*;
 import Parsing.Parser;
 
 public class Main {
