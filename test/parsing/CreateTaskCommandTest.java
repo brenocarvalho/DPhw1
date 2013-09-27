@@ -1,4 +1,4 @@
-package Parsing;
+package parsing;
 
 import static org.junit.Assert.*;
 

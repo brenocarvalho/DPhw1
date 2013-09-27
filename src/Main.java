@@ -1,7 +1,7 @@
 import javax.swing.JOptionPane;
 
 import model.*;
-import Parsing.Parser;
+import parsing.Parser;
 
 public class Main {
 	public static void main(String args[]) throws Exception{
