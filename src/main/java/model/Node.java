@@ -99,7 +99,6 @@ public class Node implements Comparable<Node>{
 		return children.iterator();
 	}
 
-	@Override
 	public int compareTo(Node n) {
 		return this.getNumParents() - n.getNumParents();
 	}

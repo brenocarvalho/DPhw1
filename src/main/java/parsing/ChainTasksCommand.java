@@ -25,7 +25,6 @@ public class ChainTasksCommand implements Command{
 		return n;
 	}
 	
-	@Override
 	public void run(String arg) throws Exception{
 		//format: "Task1Name -> Task2Name -> [...]"
 		//format: "Task1Name -> (Task
